@@ -11,15 +11,26 @@ jobs:
   second-job:
     runs-on: ubuntu-latest
     needs: first-job
+    outputs:
+      first-output: ${{ steps.second_job.outputs.first-output }}
     steps:
       - name: Print second job
-        run: echo "Second job!"
+        id: second_job
+        run: |
+          echo "Second job!"
+          echo "first-output=success!" >> $GITHUB_OUTPUT
+      - name: Consume first output
+        run: |
+          echo "The status was: ${{ steps.second_job.outputs.first-output }}"
   third-job:
     runs-on: ubuntu-latest
     needs: second-job
     steps:
       - name: Print github metadata
         run: echo "${{toJson(github)}}"
+      - name: Use output from second job
+        run: |
+          echo "Received: ${{ needs.second-job.outputs.first-output }}"
   final-job:
     runs-on: ubuntu-latest
     needs: third-job
