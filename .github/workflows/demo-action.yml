@@ -2,12 +2,17 @@ name: Demo Workflow
 on: [workflow_dispatch, push]
 jobs:
   first-job:
+    env:
+      DB_PORT: 8080
     runs-on: ubuntu-latest
     steps:
       - name: Print greeting
         run: echo "Hello World!"
       - name: Print first job
         run: echo "First job!"
+      - name: Print environment variable value
+        run: |
+          echo "DB Port: ${{ env.DB_PORT }}"
   second-job:
     runs-on: ubuntu-latest
     needs: first-job
