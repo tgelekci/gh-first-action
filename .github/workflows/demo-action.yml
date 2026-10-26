@@ -4,6 +4,7 @@ env:
   DB_NAME: ${{ secrets.DB_NAME }}
 jobs:
   first-job:
+    environment: testenv
     env:
       DB_PORT: 8080
     runs-on: ubuntu-latest
